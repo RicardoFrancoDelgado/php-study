@@ -43,6 +43,15 @@
     // "Mais um Projeto",
     // "Outro projeto adicionado"
   ];
+
+  function verifiarSeEstaFinalizado($projeto)
+  {
+    if ($projeto['concluido']) {
+      return '<span style="color: green">✅ finalizado</span>';
+    }
+    // o que significa que se não retornar true ele automaticamente cai em false
+    return '<span style="color: red">❌ não finalizado</span>';
+  }
   ?>
 
   <h1><?= $titulo ?></h1>
@@ -67,11 +76,7 @@
           <div><?= $projeto['data'] ?></div>
           <div>
             Projeto:
-            <?php if (!$projeto['concluido']): ?>
-              <span>❌ não finalizado</span>
-            <?php else: ?>
-              <span>✅ finalizado</span>
-            <?php endif; ?>
+            <?= verifiarSeEstaFinalizado($projeto); ?>
           </div>
         </div>
       </div>
