@@ -35,19 +35,19 @@
     [
       "titulo" => "Lista de Tarefas",
       "concluido" => true,
-      "data" => "2020-05-27",
+      "data" => "2021-05-27",
       "descricao" => "Lista de tarefas. Escrito em PHP e HTML."
     ],
     [
       "titulo" => "Controle de leitura de livros",
       "concluido" => false,
-      "data" => "2020-05-27",
+      "data" => "2022-05-27",
       "descricao" => "Lista de Livros."
     ],
     [
       "titulo" => "Projeto não finalizado",
       "concluido" => false,
-      "data" => "2020-05-27",
+      "data" => "2023-05-27",
       "descricao" => "Projeto em andamento"
     ],
   ];
@@ -79,6 +79,19 @@
     return $filtrados;
   }
 
+  function filtrarPorAno($listaDeProjetos, $anoMinimo)
+  {
+    $filtrados = [];
+    foreach ($listaDeProjetos as $projeto) {
+      $ano = explode("-", $projeto['data'])[0]; // "2025-11-11" [0] -> 2025
+      if ($ano > $anoMinimo) {
+        $filtrados[] = $projeto;
+      }
+    }
+
+    return $filtrados;
+  }
+
   ?>
 
   <h1><?= $titulo ?></h1>
@@ -90,10 +103,10 @@
   <hr>
   <ul>
 
-    <?php foreach (filtrarProjetos($projetos, true) as $projeto): ?>
+    <?php foreach (filtrarPorAno($projetos, 2019) as $projeto): ?>
 
       <div
-        <?php if (((2024 - $projeto['data']) > 2)): ?>
+        <?php if (((2024 - (int)explode("-", $projeto['data'])) > 2)): ?>
         style="background-color: burlywood;"
         <?php endif; ?>>
         <h2><?= $projeto['titulo'] ?></h2>
