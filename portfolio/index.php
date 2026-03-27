@@ -38,13 +38,21 @@
       "data" => "2020-05-27",
       "descricao" => "Lista de tarefas. Escrito em PHP e HTML."
     ],
-    // "Lista de tarefas",
-    // "Controle de Leitura de livros",
-    // "Mais um Projeto",
-    // "Outro projeto adicionado"
+    [
+      "titulo" => "Controle de leitura de livros",
+      "concluido" => false,
+      "data" => "2020-05-27",
+      "descricao" => "Lista de Livros."
+    ],
+    [
+      "titulo" => "Projeto não finalizado",
+      "concluido" => false,
+      "data" => "2020-05-27",
+      "descricao" => "Projeto em andamento"
+    ],
   ];
 
-  function verifiarSeEstaFinalizado($projeto)
+  function verificarSeEstaFinalizado($projeto)
   {
     if ($projeto['concluido']) {
       return '<span style="color: green">✅ finalizado</span>';
@@ -52,6 +60,25 @@
     // o que significa que se não retornar true ele automaticamente cai em false
     return '<span style="color: red">❌ não finalizado</span>';
   }
+
+  function filtrarProjetos($listaDeProjetos, $finalizado = null)
+  {
+    // se eu não quero filtrar eu só retorno tudo
+    if (is_null($finalizado)) {
+      return $listaDeProjetos;
+    }
+
+    // se eu quero filtrar eu retorno aqui em baixo
+    $filtrados = [];
+    foreach ($listaDeProjetos as $projeto) {
+      if ($projeto['concluido'] === $finalizado) {
+        $filtrados[] = $projeto; // adição de elementos numa lista php
+      }
+    }
+
+    return $filtrados;
+  }
+
   ?>
 
   <h1><?= $titulo ?></h1>
@@ -63,7 +90,7 @@
   <hr>
   <ul>
 
-    <?php foreach ($projetos as $projeto): ?>
+    <?php foreach (filtrarProjetos($projetos, true) as $projeto): ?>
 
       <div
         <?php if (((2024 - $projeto['data']) > 2)): ?>
@@ -76,7 +103,7 @@
           <div><?= $projeto['data'] ?></div>
           <div>
             Projeto:
-            <?= verifiarSeEstaFinalizado($projeto); ?>
+            <?= verificarSeEstaFinalizado($projeto); ?>
           </div>
         </div>
       </div>
