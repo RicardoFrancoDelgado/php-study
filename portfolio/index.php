@@ -75,39 +75,22 @@
     ["nome" => "Harry Potter"],
   ];
 
-  function verificarSeEstaFinalizado($projeto)
-  {
-    if ($projeto['concluido']) {
-      return '<span style="color: green">✅ finalizado</span>';
-    }
-    // o que significa que se não retornar true ele automaticamente cai em false
-    return '<span style="color: red">❌ não finalizado</span>';
-  }
-
   //? Dessa forma o filtro fica disponível para qualquer 
   //? É possível controlar o comportamento do filtro passando uma função anônima como parâmetro
   //? Essa função vai ser responsável por dizer que filtro ele vai fazer
-  function filtro($itens, $funcao)
-  {
-    // se eu quero filtrar eu retorno aqui em baixo
-    $filtrados = [];
-    foreach ($itens as $item) {
-      if ($funcao($item)) {
-        $filtrados[] = $item; // adição de elementos numa lista php
-      }
-    }
 
-    return $filtrados;
-  }
-
+  // Em php o array_filter permite que façamos um filtro no nosso array, passando uma coleção e uma função de callback.
   // o que permite armazenar em uma variável a função em si e seu retorno
   // passando os mesmos parâmetros
   // é possível sobrescrever as variaveis filtrando por ano também
-  $projetosFiltrados = filtro($projetos, function ($projeto) {
-    return $projeto['ano'] < 2027;
+
+  // Então além de usar uma função do próprio php, separamos as regras e tornamos nosso código
+  // mais legível e fácil de manutenção
+  $projetosFiltrados = array_filter($projetos, function ($projeto) {
+    return $projeto['ano'] <= 2027;
   });
-  $projetosFiltrados = filtro($projetosFiltrados, function ($projeto) {
-    return $projeto['linguagem'] === "Java";
+  $projetosFiltrados = array_filter($projetosFiltrados, function ($projeto) {
+    return $projeto['linguagem'] === "PHP";
   });
 
 
@@ -120,7 +103,26 @@
     return "Função anônima";
   };
 
+  //TODO: Identificar todos os códigos que possuem regras de negócios e separar as regras do que o usuário vê
 
+  //* Filtro de livros
+  $livrosFiltrados = array_filter($livros, function ($livro) {
+    return $livro['nome'] === "Harry Potter";
+  });
+
+  //* Regra de negócio para projeto menor que o ano < 2
+  $projetoAntigo = function ($projeto) {
+    return (2019 - $projeto['ano'] < 2) ? 'style="background-color: burlywood"' : '';
+  };
+
+  //* Verificar se o projeto está finalizado
+  $projetoFinalizado = function ($projeto) {
+    if ($projeto['concluido']) {
+      return '<span style="color: green">✅ finalizado</span>';
+    }
+
+    return '<span style="color: red">❌ não finalizado</span>';
+  };
   ?>
 
   <h1><?= $titulo ?></h1>
@@ -131,12 +133,9 @@
   <p><?php echo $anonFunc() ?></p>
 
   <hr>
+
   <ul>
-    <?php foreach (
-      filtro($livros, function ($livro) {
-        return $livro['nome'] === "Harry Potter";
-      }) as $livro
-    ): ?>
+    <?php foreach ($livrosFiltrados as $livro): ?>
       <li><?= $livro['nome'] ?></li>
     <?php endforeach ?>
   </ul>
@@ -144,13 +143,8 @@
   <hr>
 
   <ul>
-
     <?php foreach ($projetosFiltrados as $projeto): ?>
-
-      <div
-        <?php if ((2019 - $projeto['ano']) < 2): ?>
-        style="background-color: burlywood;"
-        <?php endif; ?>>
+      <div <?= $projetoAntigo($projeto) ?>>
         <h2><?= $projeto['titulo'] ?></h2>
         <p><?= $projeto['descricao'] ?></p>
         <p><?= $projeto['linguagem'] ?></p>
@@ -158,7 +152,7 @@
           <div><?= "Ano: " . $projeto['ano'] ?></div>
           <div>
             Projeto:
-            <?= verificarSeEstaFinalizado($projeto); ?>
+            <?= $projetoFinalizado($projeto); ?>
           </div>
         </div>
       </div>
