@@ -29,27 +29,44 @@
     [
       "titulo" => "Meu Portfólio",
       "concluido" => true,
-      "data" => "2020-03-27",
+      "ano" => 2022,
       "descricao" => "Meu primeiro portfólio. Escrito em PHP e HTML."
     ],
     [
       "titulo" => "Lista de Tarefas",
       "concluido" => true,
-      "data" => "2021-05-27",
+      "ano" => 2023,
       "descricao" => "Lista de tarefas. Escrito em PHP e HTML."
     ],
     [
       "titulo" => "Controle de leitura de livros",
       "concluido" => false,
-      "data" => "2022-05-27",
+      "ano" => 2024,
       "descricao" => "Lista de Livros."
     ],
     [
       "titulo" => "Projeto não finalizado",
       "concluido" => false,
-      "data" => "2023-05-27",
+      "ano" => 2025,
       "descricao" => "Projeto em andamento"
     ],
+    [
+      "titulo" => "Medical Group",
+      "concluido" => true,
+      "ano" => 2026,
+      "descricao" => "Projeto do VNW"
+    ],
+    [
+      "titulo" => "Medical reminder",
+      "concluido" => false,
+      "ano" => 2026,
+      "descricao" => "Projeto em Java"
+    ],
+  ];
+
+  $livros = [
+    ["nome" => "Senhor dos Anéis"],
+    ["nome" => "Harry Potter"],
   ];
 
   function verificarSeEstaFinalizado($projeto)
@@ -61,36 +78,39 @@
     return '<span style="color: red">❌ não finalizado</span>';
   }
 
-  function filtrarProjetos($listaDeProjetos, $finalizado = null)
+  //? Dessa forma o filtro fica disponível para qualquer 
+  //? É possível controlar o comportamento do filtro passando uma função anônima como parâmetro
+  //? Essa função vai ser responsável por dizer que filtro ele vai fazer
+  function filtro($itens, $funcao)
   {
-    // se eu não quero filtrar eu só retorno tudo
-    if (is_null($finalizado)) {
-      return $listaDeProjetos;
-    }
-
     // se eu quero filtrar eu retorno aqui em baixo
     $filtrados = [];
-    foreach ($listaDeProjetos as $projeto) {
-      if ($projeto['concluido'] === $finalizado) {
-        $filtrados[] = $projeto; // adição de elementos numa lista php
+    foreach ($itens as $item) {
+      if ($funcao($item)) {
+        $filtrados[] = $item; // adição de elementos numa lista php
       }
     }
 
     return $filtrados;
   }
 
-  function filtrarPorAno($listaDeProjetos, $anoMinimo)
-  {
-    $filtrados = [];
-    foreach ($listaDeProjetos as $projeto) {
-      $ano = explode("-", $projeto['data'])[0]; // "2025-11-11" [0] -> 2025
-      if ($ano > $anoMinimo) {
-        $filtrados[] = $projeto;
-      }
-    }
+  // o que permite armazenar em uma variável a função em si e seu retorno
+  // passando os mesmos parâmetros
+  // é possível sobrescrever as variaveis filtrando por ano também
+  $projetosFiltrados = filtro($projetos, function ($projeto) {
+    return $projeto['ano'] === 2025 || $projeto['ano'] === 2026;
+  });
 
-    return $filtrados;
-  }
+
+  // funções anônimas e refatoração
+  // armazenar funções dentro de variáveis -> precisa terminar com ; pq é uma atribuição
+  // ao passar uma fução para uma variável ela precisa de ; e também precisa de 
+  // $ ao ser chamada
+  //? exemplo de função anônima
+  $anonFunc = function () {
+    return "Função anônima";
+  };
+
 
   ?>
 
@@ -99,21 +119,34 @@
   <p><?= "Idade: " . $idade ?></p>
   <p><?= "Formação: " . $formacao ?></p>
   <p><?= "Habilidade: " . $stack ?></p>
+  <p><?php echo $anonFunc() ?></p>
 
   <hr>
   <ul>
+    <?php foreach (
+      filtro($livros, function ($livro) {
+        return $livro['nome'] === "Harry Potter";
+      }) as $livro
+    ): ?>
+      <li><?= $livro['nome'] ?></li>
+    <?php endforeach ?>
+  </ul>
 
-    <?php foreach (filtrarPorAno($projetos, 2019) as $projeto): ?>
+  <hr>
+
+  <ul>
+
+    <?php foreach ($projetosFiltrados as $projeto): ?>
 
       <div
-        <?php if (((2024 - (int)explode("-", $projeto['data'])) > 2)): ?>
+        <?php if ((2019 - $projeto['ano']) < 2): ?>
         style="background-color: burlywood;"
         <?php endif; ?>>
         <h2><?= $projeto['titulo'] ?></h2>
         <p><?= $projeto['descricao'] ?></p>
 
         <div>
-          <div><?= $projeto['data'] ?></div>
+          <div><?= "Ano: " . $projeto['ano'] ?></div>
           <div>
             Projeto:
             <?= verificarSeEstaFinalizado($projeto); ?>
