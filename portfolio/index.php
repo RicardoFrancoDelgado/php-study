@@ -30,37 +30,43 @@
       "titulo" => "Meu Portfólio",
       "concluido" => true,
       "ano" => 2022,
-      "descricao" => "Meu primeiro portfólio. Escrito em PHP e HTML."
+      "descricao" => "Meu primeiro portfólio. Escrito em PHP e HTML.",
+      "linguagem" => "PHP",
     ],
     [
       "titulo" => "Lista de Tarefas",
       "concluido" => true,
       "ano" => 2023,
-      "descricao" => "Lista de tarefas. Escrito em PHP e HTML."
+      "descricao" => "Lista de tarefas. Escrito em PHP e HTML.",
+      "linguagem" => "PHP",
     ],
     [
       "titulo" => "Controle de leitura de livros",
       "concluido" => false,
       "ano" => 2024,
-      "descricao" => "Lista de Livros."
+      "descricao" => "Lista de Livros.",
+      "linguagem" => "PHP",
     ],
     [
       "titulo" => "Projeto não finalizado",
       "concluido" => false,
       "ano" => 2025,
-      "descricao" => "Projeto em andamento"
+      "descricao" => "Projeto em andamento",
+      "linguagem" => "PHP",
     ],
     [
       "titulo" => "Medical Group",
       "concluido" => true,
       "ano" => 2026,
-      "descricao" => "Projeto do VNW"
+      "descricao" => "Projeto do VNW",
+      "linguagem" => "React",
     ],
     [
       "titulo" => "Medical reminder",
       "concluido" => false,
       "ano" => 2026,
-      "descricao" => "Projeto em Java"
+      "descricao" => "Projeto em Java",
+      "linguagem" => "Java",
     ],
   ];
 
@@ -98,7 +104,10 @@
   // passando os mesmos parâmetros
   // é possível sobrescrever as variaveis filtrando por ano também
   $projetosFiltrados = filtro($projetos, function ($projeto) {
-    return $projeto['ano'] === 2025 || $projeto['ano'] === 2026;
+    return $projeto['ano'] < 2027;
+  });
+  $projetosFiltrados = filtro($projetosFiltrados, function ($projeto) {
+    return $projeto['linguagem'] === "Java";
   });
 
 
@@ -144,7 +153,7 @@
         <?php endif; ?>>
         <h2><?= $projeto['titulo'] ?></h2>
         <p><?= $projeto['descricao'] ?></p>
-
+        <p><?= $projeto['linguagem'] ?></p>
         <div>
           <div><?= "Ano: " . $projeto['ano'] ?></div>
           <div>
