@@ -1,3 +1,15 @@
+<?php
+// livros pesquisa e filtrar
+require 'dados.php';
+
+$id = $_REQUEST['id']; // variável super global
+
+$filtrado = array_filter($livros, fn($livro) =>  $livro['id'] == $id);
+
+$livro = array_pop($filtrado);
+
+?>
+
 <!doctype html>
 <html>
 
@@ -26,7 +38,17 @@
   </header>
 
   <main class="mx-auto max-w-screen-lg space-y-6">
-    // muda o main
+    <div class="border-stone-800 border-2 bg-stone-900 p-2 rounded">
+      <div class="flex">
+        <div class="w-1/3">imagem</div>
+        <div class="space-y-1">
+          <a href="/livro.php?id=<?= $livro['id'] ?>" class="font-semibold hover:underline"><?= $livro['titulo'] ?></a>
+          <div class="text-xs italic"><?= $livro['autor'] ?></div>
+          <div class="text-xs italic">⭐⭐⭐⭐⭐(3 avaliações)</div>
+        </div>
+      </div>
+      <div class="text-sm mt-2"><?= $livro['descricao'] ?></div>
+    </div>
   </main>
 </body>
 
