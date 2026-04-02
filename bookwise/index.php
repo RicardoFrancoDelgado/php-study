@@ -1,12 +1,4 @@
 <?php
-echo "SEMPRE CAI NO INDEX.PHP";
-
-
-$controller = "index";
-
-
-if (isset($_SERVER['PATH_INFO'])) {
-  $controller = str_replace("/", "", $_SERVER['PATH_INFO']);
-};
-
-require "controllers/{$controller}.controller.php";
+//echo "SEMPRE CAI NO INDEX.PHP";
+require 'functions.php';
+require 'routes.php';
