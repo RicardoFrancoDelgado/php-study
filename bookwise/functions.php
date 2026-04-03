@@ -1,6 +1,6 @@
 <?php
 // parâmetro = null numa função indica que ela é opcional
-function view($view, $data = null)
+function view($view, $data = [])
 {
 
   // duplo sinal de dolar e a variavel -> criando uma variável nova com nome de livros e ela vai receber os dados  
